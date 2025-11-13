@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.aksa.presentation.auth.ForgotPasswordScreen
 import com.example.aksa.presentation.auth.LoginScreen
 import com.example.aksa.presentation.auth.RegisterScreen
 import com.example.aksa.ui.theme.AksaTheme
@@ -33,12 +34,25 @@ class MainActivity : ComponentActivity() {
                         composable(NavDestination.LOGIN) {
                             LoginScreen(
                                 onRegisterClick = { navController.navigate(NavDestination.REGISTER) },
+                                onForgotPasswordClick = { navController.navigate(NavDestination.FORGOT_PASSWORD) },
+                                onBackClick = { navController.popBackStack() }
                             )
                         }
 
                         composable(NavDestination.REGISTER) {
                             RegisterScreen(
-                                onLoginClick = { navController.navigate(NavDestination.LOGIN) },
+                                onLoginClick = { navController.navigate(NavDestination.LOGIN) {
+                                    popUpTo(NavDestination.REGISTER) {
+                                        inclusive = true
+                                    }
+                                } },
+                                onBackClick = { navController.popBackStack() }
+                            )
+                        }
+
+                        composable(NavDestination.FORGOT_PASSWORD) {
+                            ForgotPasswordScreen(
+                                onBackClick = { navController.popBackStack() }
                             )
                         }
                     }
