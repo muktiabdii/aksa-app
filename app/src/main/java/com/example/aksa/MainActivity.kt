@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.aksa.presentation.auth.LoginScreen
+import com.example.aksa.presentation.auth.RegisterScreen
 import com.example.aksa.ui.theme.AksaTheme
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +31,15 @@ class MainActivity : ComponentActivity() {
                         startDestination = NavDestination.LOGIN,
                     ) {
                         composable(NavDestination.LOGIN) {
-                            LoginScreen()
+                            LoginScreen(
+                                onRegisterClick = { navController.navigate(NavDestination.REGISTER) },
+                            )
+                        }
+
+                        composable(NavDestination.REGISTER) {
+                            RegisterScreen(
+                                onLoginClick = { navController.navigate(NavDestination.LOGIN) },
+                            )
                         }
                     }
                 }

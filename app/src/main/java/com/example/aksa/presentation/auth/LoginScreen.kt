@@ -56,7 +56,9 @@ fun LoginScreen(
             .background(color = Sc90)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             // top bar
             TopAppBar(
@@ -75,7 +77,7 @@ fun LoginScreen(
                 )
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
             // title section
             Column(
@@ -121,7 +123,6 @@ fun LoginScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
                         .padding(21.dp)
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
@@ -149,7 +150,7 @@ fun LoginScreen(
 
                     // password section
                     Text(
-                        text = "Password",
+                        text = "Kata Sandi",
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontFamily = FontFamily(Font(R.font.nunito_semibold)),
@@ -265,7 +266,7 @@ fun LoginScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .padding(bottom = 24.dp),
+                .padding(bottom = 16.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             val annotatedText = buildAnnotatedString {
