@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.aksa" />
+                  <option name="mobileSdkAppId" value="1:1093120466862:android:8a56bd98c235983fe0b23f" />
+                  <option name="projectId" value="aksa-14422" />
+                  <option name="projectNumber" value="1093120466862" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

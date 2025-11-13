@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1093120466862",
+    "project_id": "aksa-14422",
+    "storage_bucket": "aksa-14422.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093120466862:android:8a56bd98c235983fe0b23f",
+        "android_client_info": {
+          "package_name": "com.example.aksa"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMcCCuFrkggIc8IAefndvnF0F7g0zzG4o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
