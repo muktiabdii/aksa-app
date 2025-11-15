@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="20dp"
+    android:height="20dp"
+    android:viewportWidth="20"
+    android:viewportHeight="20">
+
+    <!-- Lingkaran luar -->
+    <path
+        android:strokeColor="#502F21"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M9.99935 18.3327C14.6018 18.3327 18.3327 14.6018 18.3327 9.99935C18.3327 5.39685 14.6018 1.66602 9.99935 1.66602C5.39685 1.66602 1.66602 5.39685 1.66602 9.99935C1.66602 14.6018 5.39685 18.3327 9.99935 18.3327Z" />
+
+    <!-- Garis tanda tanya -->
+    <path
+        android:strokeColor="#502F21"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M7.5 7.5C7.5 4.58333 12.0833 4.58333 12.0833 7.5C12.0833 9.58333 10 9.16667 10 11.6667" />
+
+    <!-- Titik bawah -->
+    <path
+        android:strokeColor="#502F21"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="@android:color/transparent"
+        android:pathData="M10 15.0083L10.0083 14.9992" />
+
+</vector>
