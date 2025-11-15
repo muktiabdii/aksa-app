@@ -3,20 +3,16 @@ package com.example.aksa
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.aksa.presentation.auth.ForgotPasswordScreen
 import com.example.aksa.presentation.auth.LoginScreen
 import com.example.aksa.presentation.auth.RegisterScreen
+import com.example.aksa.presentation.onboarding.OnboardingScreen
 import com.example.aksa.ui.theme.AksaTheme
 
 class MainActivity : ComponentActivity() {
@@ -29,8 +25,14 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = NavDestination.LOGIN,
+                        startDestination = NavDestination.ONBOARDING,
                     ) {
+                        composable(NavDestination.ONBOARDING) {
+                            OnboardingScreen(
+                                onFinishClick = { navController.navigate(NavDestination.LOGIN) }
+                            )
+                        }
+
                         composable(NavDestination.LOGIN) {
                             LoginScreen(
                                 onRegisterClick = { navController.navigate(NavDestination.REGISTER) },
