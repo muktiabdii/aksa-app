@@ -13,6 +13,7 @@ import com.example.aksa.presentation.auth.ForgotPasswordScreen
 import com.example.aksa.presentation.auth.LoginScreen
 import com.example.aksa.presentation.auth.RegisterScreen
 import com.example.aksa.presentation.onboarding.OnboardingScreen
+import com.example.aksa.presentation.splash.SplashScreen
 import com.example.aksa.ui.theme.AksaTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,8 +26,14 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(
                         navController = navController,
-                        startDestination = NavDestination.ONBOARDING,
+                        startDestination = NavDestination.SPLASH,
                     ) {
+                        composable(NavDestination.SPLASH) {
+                            SplashScreen(
+                                onNavigateToNext = { navController.navigate(NavDestination.ONBOARDING) }
+                            )
+                        }
+
                         composable(NavDestination.ONBOARDING) {
                             OnboardingScreen(
                                 onFinishClick = { navController.navigate(NavDestination.LOGIN) }
