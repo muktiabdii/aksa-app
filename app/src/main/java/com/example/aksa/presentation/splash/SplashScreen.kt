@@ -22,10 +22,16 @@ import com.example.aksa.ui.theme.NonWhite
 
 @Composable
 fun SplashScreen(
-    onNavigateToNext: () -> Unit = {}
+    onNavigateToLogin: () -> Unit = {},
+    onNavigateToHome: () -> Unit = {},
+    onNavigateToOnBoarding: () -> Unit = {},
+    splashViewModel: SplashViewModel
 ) {
     // animasi alpha
     val alphaAnim = remember { Animatable(0f) }
+
+    val isOnBoardingShown by splashViewModel.isOnBoardingShown().collectAsState(initial = false)
+    val userUid by splashViewModel.getUserUidFlow().collectAsState(initial = null)
 
     LaunchedEffect(Unit) {
         // durasi fade in
@@ -35,7 +41,24 @@ fun SplashScreen(
         )
 
         delay(1000)
-        onNavigateToNext()
+        // kalau onboarding belum ditampilkan
+        if (!isOnBoardingShown) {
+            onNavigateToOnBoarding()
+        }
+
+        else {
+
+            // kalau sudah onboarding tapi belum login
+            if (userUid.isNullOrEmpty()) {
+                onNavigateToLogin()
+            }
+
+            // kalau sudah onboarding dan sudah login
+            else {
+                splashViewModel.loadUser(userUid!!)
+                onNavigateToHome()
+            }
+        }
     }
 
     Box(

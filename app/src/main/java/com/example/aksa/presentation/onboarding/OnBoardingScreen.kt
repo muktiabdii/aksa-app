@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.aksa.R
 import com.example.aksa.presentation.onboarding.comps.OnboardingPageContent
 import com.example.aksa.presentation.onboarding.comps.pages
+import com.example.aksa.presentation.splash.SplashViewModel
 import com.example.aksa.ui.theme.NonBlack
 import com.example.aksa.ui.theme.NonWhite
 import com.example.aksa.ui.theme.Sc30
@@ -36,7 +37,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingScreen(
-    onFinishClick: () -> Unit = {}
+    onFinishClick: () -> Unit = {},
+    splashViewModel: SplashViewModel
 ) {
 
     val pagerState = rememberPagerState(pageCount = { pages.size })
@@ -59,7 +61,10 @@ fun OnboardingScreen(
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(
-                    onClick = onFinishClick
+                    onClick = {
+                        splashViewModel.setOnBoardingShown()
+                        onFinishClick()
+                    }
                 ) {
                     Text(
                         text = "Lewati",
@@ -132,6 +137,7 @@ fun OnboardingScreen(
                                 pagerState.animateScrollToPage(pagerState.currentPage + 1)
                             }
                         } else {
+                            splashViewModel.setOnBoardingShown()
                             onFinishClick()
                         }
                     },

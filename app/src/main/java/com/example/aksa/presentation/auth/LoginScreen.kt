@@ -1,5 +1,10 @@
 package com.example.aksa.presentation.auth
 
+import android.app.Activity
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -25,6 +31,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.aksa.R
 import com.example.aksa.presentation.auth.comps.AuthButton
 import com.example.aksa.presentation.auth.comps.AuthInputField
@@ -35,20 +42,61 @@ import com.example.aksa.ui.theme.Sc100
 import com.example.aksa.ui.theme.Sc20
 import com.example.aksa.ui.theme.Sc80
 import com.example.aksa.ui.theme.Sc90
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     onBackClick: () -> Unit = {},
-    onLoginClick: (String, String) -> Unit = { _, _ -> },
-    onGoogleClick: () -> Unit = {},
-    onFacebookClick: () -> Unit = {},
     onForgotPasswordClick: () -> Unit = {},
-    onRegisterClick: () -> Unit = {}
+    onRegisterClick: () -> Unit = {},
+    onNavigateToHome: () -> Unit = {},
+    authViewModel: AuthViewModel
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val loginState by authViewModel.loginState.collectAsState()
+    val loginEmail by authViewModel.loginEmail.collectAsState()
+    val loginPassword by authViewModel.loginPassword.collectAsState()
+
+    LaunchedEffect(Unit) {
+        authViewModel.resetLoginState()
+        authViewModel.resetLoginForm()
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            val account = task.result
+            val idToken = account.idToken
+            if (idToken != null) {
+                authViewModel.signInWithGoogleForLogin(idToken)
+            }
+        }
+    }
+
+    when (loginState) {
+        is AuthState.Success -> {
+            LaunchedEffect(loginState) {
+                onNavigateToHome()
+                authViewModel.resetLoginState()
+                authViewModel.resetLoginForm()
+            }
+        }
+
+        is AuthState.Error -> {
+            val message = (loginState as AuthState.Error).message
+            LaunchedEffect(message) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                authViewModel.resetLoginState()
+            }
+        }
+
+        else -> Unit
+    }
 
     Box(
         modifier = Modifier
@@ -140,8 +188,8 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     AuthInputField(
-                        value = email,
-                        onValueChange = { email = it },
+                        value = loginEmail,
+                        onValueChange = { authViewModel.onLoginEmailChange(it) },
                         placeholder = "Masukkan Email Anda",
                         leadingIcon = R.drawable.ic_email
                     )
@@ -161,8 +209,8 @@ fun LoginScreen(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     AuthInputField(
-                        value = password,
-                        onValueChange = { password = it },
+                        value = loginPassword,
+                        onValueChange = { authViewModel.onLoginPasswordChange(it) },
                         placeholder = "Masukkan Kata Sandi Anda",
                         leadingIcon = R.drawable.ic_password,
                         isPassword = true
@@ -192,12 +240,9 @@ fun LoginScreen(
                     // login button
                     AuthButton(
                         text = "Masuk",
-                        onClick = {
-                            isLoading = true
-                            onLoginClick(email, password)
-                        },
-                        isLoading = isLoading,
-                        enabled = email.isNotBlank() && password.isNotBlank()
+                        onClick = { authViewModel.login() },
+                        isLoading = loginState is AuthState.Loading,
+                        enabled = loginEmail.isNotBlank() && loginPassword.isNotBlank()
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -245,14 +290,26 @@ fun LoginScreen(
                     ) {
                         AuthSocialButton(
                             text = "Google",
-                            onClick = onGoogleClick,
+                            onClick = {
+                                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                    .requestIdToken("1093120466862-o0bihdgorromv5bnp0hn46cgdu8ss0tk.apps.googleusercontent.com")
+                                    .requestEmail()
+                                    .build()
+
+                                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+
+                                googleSignInClient.signOut().addOnCompleteListener {
+                                    launcher.launch(googleSignInClient.signInIntent)
+                                }
+                            },
                             leadingIcon = R.drawable.ic_google,
                             modifier = Modifier.weight(1f)
                         )
 
+
                         AuthSocialButton(
                             text = "Facebook",
-                            onClick = onFacebookClick,
+                            onClick = {  },
                             leadingIcon = R.drawable.ic_facebook,
                             modifier = Modifier.weight(1f)
                         )

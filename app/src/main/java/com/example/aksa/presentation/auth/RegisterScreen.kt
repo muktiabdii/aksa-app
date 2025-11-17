@@ -1,5 +1,9 @@
 package com.example.aksa.presentation.auth
 
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -35,21 +40,62 @@ import com.example.aksa.ui.theme.Sc100
 import com.example.aksa.ui.theme.Sc20
 import com.example.aksa.ui.theme.Sc80
 import com.example.aksa.ui.theme.Sc90
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     onBackClick: () -> Unit = {},
-    onRegisterClick: (String, String, String, String) -> Unit = { _, _, _, _ -> },
-    onGoogleClick: () -> Unit = {},
-    onFacebookClick: () -> Unit = {},
-    onLoginClick: () -> Unit = {}
+    onLoginClick: () -> Unit = {},
+    onNavigateToLogin: () -> Unit = {},
+    authViewModel: AuthViewModel
 ) {
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+    val registerState by authViewModel.registerState.collectAsState()
+    val regName by authViewModel.regName.collectAsState()
+    val regEmail by authViewModel.regEmail.collectAsState()
+    val regPassword by authViewModel.regPassword.collectAsState()
+    val regPasswordConfirmation by authViewModel.regPasswordConfirmation.collectAsState()
+
+    LaunchedEffect(Unit) {
+        authViewModel.resetRegisterState()
+        authViewModel.resetRegisterForm()
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+            val account = task.result
+            val idToken = account.idToken
+            if (idToken != null) {
+                authViewModel.signInWithGoogleForRegister(idToken)
+            }
+        }
+    }
+
+    when (registerState) {
+        is AuthState.Success -> {
+            LaunchedEffect(registerState) {
+                onNavigateToLogin()
+                authViewModel.resetRegisterState()
+                authViewModel.resetRegisterForm()
+            }
+        }
+
+        is AuthState.Error -> {
+            val message = (registerState as AuthState.Error).message
+            LaunchedEffect(message) {
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                authViewModel.resetRegisterState()
+            }
+        }
+
+        else -> Unit
+    }
 
     Box(
         modifier = Modifier
@@ -141,8 +187,8 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     AuthInputField(
-                        value = name,
-                        onValueChange = { name = it },
+                        value = regName,
+                        onValueChange = { authViewModel.onRegNameChange(it) },
                         placeholder = "Masukkan Nama Anda",
                         leadingIcon = R.drawable.ic_person
                     )
@@ -162,8 +208,8 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     AuthInputField(
-                        value = email,
-                        onValueChange = { email = it },
+                        value = regEmail,
+                        onValueChange = { authViewModel.onRegEmailChange(it) },
                         placeholder = "Masukkan Email Anda",
                         leadingIcon = R.drawable.ic_email
                     )
@@ -183,8 +229,8 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     AuthInputField(
-                        value = password,
-                        onValueChange = { password = it },
+                        value = regPassword,
+                        onValueChange = { authViewModel.onRegPasswordChange(it) },
                         placeholder = "Masukkan Kata Sandi Anda",
                         leadingIcon = R.drawable.ic_password,
                         isPassword = true
@@ -205,8 +251,8 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     AuthInputField(
-                        value = confirmPassword,
-                        onValueChange = { confirmPassword = it },
+                        value = regPasswordConfirmation,
+                        onValueChange = { authViewModel.onRegPasswordConfirmationChange(it) },
                         placeholder = "Masukkan Kata Sandi Anda",
                         leadingIcon = R.drawable.ic_password,
                         isPassword = true
@@ -217,12 +263,9 @@ fun RegisterScreen(
                     // register button
                     AuthButton(
                         text = "Daftar",
-                        onClick = {
-                            isLoading = true
-                            onRegisterClick(name, email, password, confirmPassword)
-                        },
-                        isLoading = isLoading,
-                        enabled = name.isNotBlank() && email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank()
+                        onClick = { authViewModel.register() },
+                        isLoading = registerState is AuthState.Loading,
+                        enabled = regName.isNotBlank() && regEmail.isNotBlank() && regPassword.isNotBlank() && regPasswordConfirmation.isNotBlank()
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -270,14 +313,24 @@ fun RegisterScreen(
                     ) {
                         AuthSocialButton(
                             text = "Google",
-                            onClick = onGoogleClick,
+                            onClick = {
+                                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                    .requestIdToken("1093120466862-o0bihdgorromv5bnp0hn46cgdu8ss0tk.apps.googleusercontent.com")
+                                    .requestEmail()
+                                    .build()
+                                val googleSignInClient = GoogleSignIn.getClient(context, gso)
+
+                                googleSignInClient.signOut().addOnCompleteListener {
+                                    launcher.launch(googleSignInClient.signInIntent)
+                                }
+                            },
                             leadingIcon = R.drawable.ic_google,
                             modifier = Modifier.weight(1f)
                         )
 
                         AuthSocialButton(
                             text = "Facebook",
-                            onClick = onFacebookClick,
+                            onClick = {  },
                             leadingIcon = R.drawable.ic_facebook,
                             modifier = Modifier.weight(1f)
                         )

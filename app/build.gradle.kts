@@ -62,6 +62,12 @@ dependencies {
 
     // firebase
     implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
-    implementation("com.google.firebase:firebase-database-ktx:21.0.0")
+    implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
+
+    // datastore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    // cloudinary
+    implementation("com.cloudinary:cloudinary-android:2.3.1")
 }
