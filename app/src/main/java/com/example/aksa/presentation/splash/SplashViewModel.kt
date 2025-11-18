@@ -1,11 +1,13 @@
 package com.example.aksa.presentation.splash
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.aksa.domain.usecase.OnBoardingUseCase
 import com.example.aksa.domain.usecase.UserUseCase
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
@@ -13,28 +15,43 @@ class SplashViewModel(
     private val onBoardingUseCase: OnBoardingUseCase
 ) : ViewModel() {
 
-    // function untuk mendapatkan state onboarding
-    fun isOnBoardingShown(): Flow<Boolean> {
-        return onBoardingUseCase.getOnBoardingState()
+    private val _splashState = MutableStateFlow<SplashState>(SplashState.Loading)
+    val splashState: StateFlow<SplashState> = _splashState
+
+    init {
+        checkStartDestination()
     }
 
-    // function untuk mengubah state onboarding
+    private fun checkStartDestination() {
+        viewModelScope.launch {
+            delay(2000)
+
+            val isOnBoardingShown = onBoardingUseCase.getOnBoardingState().first()
+            val isUserLoggedIn = userUseCase.isUserLoggedIn()
+
+            if (isUserLoggedIn) {
+                _splashState.value = SplashState.NavigateToHome
+            } else {
+                if (isOnBoardingShown) {
+                    _splashState.value = SplashState.NavigateToLogin
+                } else {
+                    _splashState.value = SplashState.NavigateToOnBoarding
+                }
+            }
+        }
+    }
+
     fun setOnBoardingShown() {
         viewModelScope.launch {
             onBoardingUseCase.setOnBoardingState(true)
         }
     }
+}
 
-    // function untuk mendapatkan user uid dari cache
-    fun getUserUidFlow(): Flow<String?> {
-        return userUseCase.getUserUidFlow()
-    }
-
-    // function untuk load user
-    suspend fun loadUser(uid: String) {
-        val user = userUseCase.getUserFromRemote(uid)
-        if (user != null) {
-            userUseCase.saveUserToCache(user.uid, user.name, user.email, user.photoUrl)
-        }
-    }
+// State Navigation
+sealed class SplashState {
+    object Loading : SplashState()
+    object NavigateToOnBoarding : SplashState()
+    object NavigateToLogin : SplashState()
+    object NavigateToHome : SplashState()
 }

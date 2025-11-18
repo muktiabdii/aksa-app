@@ -1,134 +1,47 @@
 package com.example.aksa
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.aksa.data.datastore.UserPreferencesManager
 import com.example.aksa.data.repository.AuthRepositoryImpl
 import com.example.aksa.data.repository.UserRepositoryImpl
 import com.example.aksa.domain.usecase.AuthUseCase
 import com.example.aksa.domain.usecase.OnBoardingUseCase
 import com.example.aksa.domain.usecase.UserUseCase
-import com.example.aksa.presentation.auth.AuthViewModel
-import com.example.aksa.presentation.auth.AuthViewModelFactory
-import com.example.aksa.presentation.auth.ForgotPasswordScreen
-import com.example.aksa.presentation.auth.LoginScreen
-import com.example.aksa.presentation.auth.RegisterScreen
-import com.example.aksa.presentation.onboarding.OnboardingScreen
-import com.example.aksa.presentation.splash.SplashScreen
-import com.example.aksa.presentation.splash.SplashViewModel
-import com.example.aksa.presentation.splash.SplashViewModelFactory
 import com.example.aksa.ui.theme.AksaTheme
 
 class MainActivity : ComponentActivity() {
 
+    private val userPreferencesManager by lazy {
+        UserPreferencesManager(this)
+    }
+    private val userRepo by lazy {
+        UserRepositoryImpl(userPreferencesManager, this)
+    }
+    private val userUseCase by lazy {
+        UserUseCase(userRepo)
+    }
+    private val authRepo by lazy {
+        AuthRepositoryImpl()
+    }
+    private val authUseCase by lazy {
+        AuthUseCase(authRepo)
+    }
+    private val onBoardingUseCase by lazy {
+        OnBoardingUseCase(userPreferencesManager)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            val context = LocalContext.current
-            val navController = rememberNavController()
-
-            // INIT repository, usecase, dsb
-            val userRepo = UserRepositoryImpl(UserPreferencesManager(context), context)
-            val userUseCase = UserUseCase(userRepo)
-
-            val authRepo = AuthRepositoryImpl()
-            val authUseCase = AuthUseCase(authRepo)
-
-            val onBoardingUseCase = OnBoardingUseCase(UserPreferencesManager(context))
-
-            // AMAN DARI FIR BUG
-            val authViewModel: AuthViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-                factory = AuthViewModelFactory(authUseCase, userUseCase)
-            )
-
-            val splashViewModel: SplashViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
-                factory = SplashViewModelFactory(userUseCase, onBoardingUseCase)
-            )
-
             AksaTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
-                    NavHost(
-                        navController = navController,
-                        startDestination = NavDestination.SPLASH,
-                    ) {
-                        composable(NavDestination.SPLASH) {
-                            SplashScreen(
-                                onNavigateToLogin = {
-                                    navController.navigate(NavDestination.LOGIN) {
-                                        popUpTo(NavDestination.SPLASH) { inclusive = true }
-                                    }
-                                },
-                                onNavigateToHome = {
-                                    navController.navigate(NavDestination.HOME) {
-                                        popUpTo(NavDestination.SPLASH) { inclusive = true }
-                                    }
-                                },
-                                onNavigateToOnBoarding = {
-                                    navController.navigate(NavDestination.ONBOARDING) {
-                                        popUpTo(NavDestination.SPLASH) { inclusive = true }
-                                    }
-                                },
-                                splashViewModel = splashViewModel
-                            )
-                        }
-
-                        composable(NavDestination.LOGIN) {
-                            LoginScreen(
-                                onRegisterClick = { navController.navigate(NavDestination.REGISTER) },
-                                onForgotPasswordClick = { navController.navigate(NavDestination.FORGOT_PASSWORD) },
-                                onBackClick = { navController.popBackStack() },
-                                onNavigateToHome = {
-                                    navController.navigate(NavDestination.HOME) {
-                                        popUpTo(NavDestination.LOGIN) { inclusive = true }
-                                    }
-                                },
-                                authViewModel = authViewModel
-                            )
-                        }
-
-                        composable(NavDestination.REGISTER) {
-                            RegisterScreen(
-                                onLoginClick = {
-                                    navController.navigate(NavDestination.LOGIN) {
-                                        popUpTo(NavDestination.REGISTER) { inclusive = true }
-                                    }
-                                },
-                                onBackClick = { navController.popBackStack() },
-                                onNavigateToLogin = {
-                                    navController.navigate(NavDestination.LOGIN) {
-                                        popUpTo(NavDestination.REGISTER) { inclusive = true }
-                                    }
-                                },
-                                authViewModel = authViewModel
-                            )
-                        }
-
-                        composable(NavDestination.FORGOT_PASSWORD) {
-                            ForgotPasswordScreen(
-                                onBackClick = { navController.popBackStack() }
-                            )
-                        }
-
-                        composable(NavDestination.HOME) {
-                            Text(text = "Home")
-                        }
-                    }
-                }
+                AppNavHost(
+                    userUseCase = userUseCase,
+                    authUseCase = authUseCase,
+                    onBoardingUseCase = onBoardingUseCase
+                )
             }
         }
     }
 }
-
-

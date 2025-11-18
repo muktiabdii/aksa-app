@@ -12,6 +12,11 @@ class UserUseCase(private val userRepository: UserRepository) {
         return userRepository.getUserFromRemote(uid)
     }
 
+    // function untuk mendapatkan user login
+    suspend fun isUserLoggedIn(): Boolean {
+        return userRepository.isUserLoggedIn()
+    }
+
     // function untuk mendapatkan user dari cache
     suspend fun saveUserToCache(uid: String, name: String, email: String, photoUrl: String) {
         userRepository.saveUserToCache(uid, name, email, photoUrl)

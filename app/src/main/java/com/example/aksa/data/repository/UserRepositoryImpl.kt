@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.tasks.await
 import com.example.aksa.R
 import com.example.aksa.data.remote.cloudinary.CloudinaryService
+import kotlinx.coroutines.flow.first
 
 class UserRepositoryImpl(
     private val userPreferencesManager: UserPreferencesManager,
@@ -36,6 +37,12 @@ class UserRepositoryImpl(
             .await()
 
         return doc.toObject(User::class.java)
+    }
+
+    // function to check if user is logged in
+    override suspend fun isUserLoggedIn(): Boolean {
+        val uid = userPreferencesManager.userUid.first()
+        return !uid.isNullOrEmpty()
     }
 
     // function to save user to cache

@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.aksa.presentation.common.BottomNavBar
 import com.example.aksa.presentation.profile.comps.*
 import com.example.aksa.ui.theme.AksaTheme
 import com.example.aksa.R
@@ -36,7 +35,7 @@ fun ProfileScreen(
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 80.dp)
+            contentPadding = PaddingValues(bottom = 16.dp)
         ) {
             // Header
             item {
@@ -80,16 +79,10 @@ fun ProfileScreen(
                 )
             }
         }
-
-        BottomNavBar(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ProfileScreenPreview() {
     AksaTheme {
