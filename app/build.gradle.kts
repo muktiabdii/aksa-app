@@ -70,4 +70,7 @@ dependencies {
 
     // cloudinary
     implementation("com.cloudinary:cloudinary-android:2.3.1")
+
+    // coil
+    implementation("io.coil-kt.coil3:coil-compose:3.0.0")
 }

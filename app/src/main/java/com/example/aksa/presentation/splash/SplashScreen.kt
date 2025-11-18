@@ -17,7 +17,7 @@ import kotlinx.coroutines.delay
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
-import com.example.aksa.presentation.splash.comps.AngularGradientShape
+import com.example.aksa.presentation.common.AngularGradientShape
 import com.example.aksa.ui.theme.NonWhite
 
 @Composable

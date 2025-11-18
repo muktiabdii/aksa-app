@@ -1,4 +1,4 @@
-package com.example.aksa.presentation.splash.comps
+package com.example.aksa.presentation.common
 
 import android.graphics.RenderEffect
 import android.graphics.Shader
@@ -46,7 +46,7 @@ fun AngularGradientShape(
                         Color(0xFFA7725B).copy(alpha = 0.7f),
                         Color(0xFF632610).copy(alpha = 0.7f)
                     ),
-                    colorStops = listOf(0.32f, 1f)
+                    colorStops = listOf(0.45f, 1f)
                 )
 
                 drawCircle(

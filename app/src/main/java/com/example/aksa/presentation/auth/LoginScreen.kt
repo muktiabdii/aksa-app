@@ -1,7 +1,6 @@
 package com.example.aksa.presentation.auth
 
 import android.app.Activity
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,13 +11,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -28,14 +24,12 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.aksa.R
 import com.example.aksa.presentation.auth.comps.AuthButton
-import com.example.aksa.presentation.auth.comps.AuthInputField
 import com.example.aksa.presentation.auth.comps.AuthSocialButton
+import com.example.aksa.presentation.common.InputField
 import com.example.aksa.ui.theme.NonBlack
 import com.example.aksa.ui.theme.NonWhite
 import com.example.aksa.ui.theme.Sc100
@@ -187,7 +181,7 @@ fun LoginScreen(
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    AuthInputField(
+                    InputField(
                         value = loginEmail,
                         onValueChange = { authViewModel.onLoginEmailChange(it) },
                         placeholder = "Masukkan Email Anda",
@@ -208,7 +202,7 @@ fun LoginScreen(
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    AuthInputField(
+                    InputField(
                         value = loginPassword,
                         onValueChange = { authViewModel.onLoginPasswordChange(it) },
                         placeholder = "Masukkan Kata Sandi Anda",

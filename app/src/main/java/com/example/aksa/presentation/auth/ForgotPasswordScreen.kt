@@ -6,8 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,9 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.aksa.R
 import com.example.aksa.presentation.auth.comps.AuthButton
-import com.example.aksa.presentation.auth.comps.AuthInputField
+import com.example.aksa.presentation.common.InputField
 import com.example.aksa.ui.theme.NonBlack
-import com.example.aksa.ui.theme.NonWhite
 import com.example.aksa.ui.theme.Sc90
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -127,7 +124,7 @@ fun ForgotPasswordScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                AuthInputField(
+                InputField(
                     value = email,
                     onValueChange = { email = it },
                     placeholder = "Masukkan Email Anda",
