@@ -25,6 +25,7 @@ import com.example.aksa.ui.theme.Sc100
 fun TabSelector(
     selectedTab: Int,
     onTabSelected: (Int) -> Unit,
+    options: List<String>, // Tambahkan ini
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -39,19 +40,14 @@ fun TabSelector(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            TabItem(
-                text = "Local",
-                isSelected = selectedTab == 0,
-                onClick = { onTabSelected(0) },
-                modifier = Modifier.weight(1f)
-            )
-
-            TabItem(
-                text = "National",
-                isSelected = selectedTab == 1,
-                onClick = { onTabSelected(1) },
-                modifier = Modifier.weight(1f)
-            )
+            options.forEachIndexed { index, text ->
+                TabItem(
+                    text = text,
+                    isSelected = selectedTab == index,
+                    onClick = { onTabSelected(index) },
+                    modifier = Modifier.weight(1f)
+                )
+            }
         }
     }
 }

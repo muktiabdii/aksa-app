@@ -79,6 +79,7 @@ fun LeaderboardScreen(
                     TabSelector(
                         selectedTab = selectedTab,
                         onTabSelected = { selectedTab = it },
+                        options = listOf("Local", "National"),
                         modifier = Modifier.width(280.dp)
                     )
                     Spacer(modifier = Modifier.height(32.dp))

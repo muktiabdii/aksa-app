@@ -9,6 +9,7 @@ import com.example.aksa.data.repository.UserRepositoryImpl
 import com.example.aksa.domain.usecase.AuthUseCase
 import com.example.aksa.domain.usecase.OnBoardingUseCase
 import com.example.aksa.domain.usecase.UserUseCase
+import com.example.aksa.presentation.akview.museum.ViewVirtualScreen
 import com.example.aksa.ui.theme.AksaTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,11 +37,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AksaTheme {
-                AppNavHost(
-                    userUseCase = userUseCase,
-                    authUseCase = authUseCase,
-                    onBoardingUseCase = onBoardingUseCase
-                )
+                ViewVirtualScreen()
             }
         }
     }

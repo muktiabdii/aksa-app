@@ -73,4 +73,7 @@ dependencies {
 
     // coil
     implementation("io.coil-kt.coil3:coil-compose:3.0.0")
+
+    // panoramagl
+    implementation("com.github.hannesa2:panoramagl:1.11")
 }
