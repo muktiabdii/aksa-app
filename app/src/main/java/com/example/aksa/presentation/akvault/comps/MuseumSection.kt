@@ -17,7 +17,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.aksa.R
-import com.example.aksa.presentation.akvault.ArtifactItem
 import com.example.aksa.ui.theme.NonWhite
 import com.example.aksa.ui.theme.Sc10
 import com.example.aksa.ui.theme.Sc100

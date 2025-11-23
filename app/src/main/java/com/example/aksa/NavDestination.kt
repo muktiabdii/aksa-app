@@ -10,4 +10,5 @@ object NavDestination {
     const val REPORT = "report"
     const val PROFILE = "profile"
     const val AKVAULT = "akvault"
+    const val DETAIL_ITEM_AKVAULT = "detail_item_akvault"
 }

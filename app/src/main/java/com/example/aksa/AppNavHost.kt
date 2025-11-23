@@ -3,7 +3,6 @@ package com.example.aksa
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,6 +16,7 @@ import com.example.aksa.domain.usecase.AuthUseCase
 import com.example.aksa.domain.usecase.OnBoardingUseCase
 import com.example.aksa.domain.usecase.UserUseCase
 import com.example.aksa.presentation.akvault.AkVaultScreen
+import com.example.aksa.presentation.akvault.DetailItemAkVault
 import com.example.aksa.presentation.auth.AuthViewModel
 import com.example.aksa.presentation.auth.AuthViewModelFactory
 import com.example.aksa.presentation.auth.ForgotPasswordScreen
@@ -77,7 +77,7 @@ fun AppNavHost(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = NavDestination.AKVAULT,
+            startDestination = NavDestination.DETAIL_ITEM_AKVAULT,
             modifier = Modifier.padding(innerPadding)
         ) {
             // SPLASH & ONBOARDING
@@ -182,6 +182,10 @@ fun AppNavHost(
             // AKVAULT
             composable (NavDestination.AKVAULT ) {
                 AkVaultScreen()
+            }
+
+            composable(NavDestination.DETAIL_ITEM_AKVAULT) {
+                DetailItemAkVault()
             }
         }
     }

@@ -30,7 +30,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.aksa.R
-import com.example.aksa.presentation.akvault.Museum
 import com.example.aksa.ui.theme.NonBlack
 import com.example.aksa.ui.theme.NonWhite
 import com.example.aksa.ui.theme.Nr10

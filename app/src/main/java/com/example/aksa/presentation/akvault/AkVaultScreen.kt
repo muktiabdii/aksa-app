@@ -101,7 +101,7 @@ fun AkVaultScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(NonWhite)
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
