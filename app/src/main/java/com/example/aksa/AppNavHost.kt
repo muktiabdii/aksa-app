@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.aksa.domain.usecase.AuthUseCase
 import com.example.aksa.domain.usecase.OnBoardingUseCase
 import com.example.aksa.domain.usecase.UserUseCase
+import com.example.aksa.presentation.akvault.AkVaultScreen
 import com.example.aksa.presentation.auth.AuthViewModel
 import com.example.aksa.presentation.auth.AuthViewModelFactory
 import com.example.aksa.presentation.auth.ForgotPasswordScreen
@@ -76,7 +77,7 @@ fun AppNavHost(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = NavDestination.SPLASH,
+            startDestination = NavDestination.AKVAULT,
             modifier = Modifier.padding(innerPadding)
         ) {
             // SPLASH & ONBOARDING
@@ -176,6 +177,11 @@ fun AppNavHost(
                         }
                     }
                 )
+            }
+
+            // AKVAULT
+            composable (NavDestination.AKVAULT ) {
+                AkVaultScreen()
             }
         }
     }
