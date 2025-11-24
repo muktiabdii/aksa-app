@@ -37,7 +37,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AksaTheme {
-                ViewVirtualScreen()
+                AppNavHost(
+                    userUseCase = userUseCase,
+                    authUseCase = authUseCase,
+                    onBoardingUseCase = onBoardingUseCase
+                )
             }
         }
     }

@@ -158,7 +158,12 @@ fun AppNavHost(
             // HOME, REPORT, PROFILE
             composable(NavDestination.HOME) {
                 HomeScreen(
-                    onBackClick = { navController.popBackStack() }
+                    onProfileClick = {  },
+                    onFeatureClick = {  },
+                    onArticleClick = {  },
+                    onMuseumClick = {  },
+                    onExploreClick = {  },
+                    onSearchChange = {  }
                 )
             }
 
