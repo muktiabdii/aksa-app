@@ -100,13 +100,3 @@ fun DayItem(
         }
     }
 }
-
-@Preview
-@Composable
-private fun sdf() {
-    DayItem(
-        day = "Sen",
-        date = "01",
-        isSelected = true
-    )
-}

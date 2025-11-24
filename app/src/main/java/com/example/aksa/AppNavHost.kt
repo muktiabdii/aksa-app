@@ -17,6 +17,7 @@ import com.example.aksa.domain.usecase.OnBoardingUseCase
 import com.example.aksa.domain.usecase.UserUseCase
 import com.example.aksa.presentation.akvault.AkVaultScreen
 import com.example.aksa.presentation.akvault.DetailItemAkVault
+import com.example.aksa.presentation.akvault.DetailMuseumAkVaultScreen
 import com.example.aksa.presentation.auth.AuthViewModel
 import com.example.aksa.presentation.auth.AuthViewModelFactory
 import com.example.aksa.presentation.auth.ForgotPasswordScreen
@@ -63,8 +64,7 @@ fun AppNavHost(
                     currentRoute = currentRoute,
                     onNavigate = { route ->
                         navController.navigate(route) {
-                            // popupTo untuk menghapus stack saat ini
-                            popUpTo(navController.graph.findStartDestination().id) {
+                            popUpTo(NavDestination.HOME) {
                                 saveState = true
                             }
                             launchSingleTop = true
@@ -77,7 +77,7 @@ fun AppNavHost(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = NavDestination.DETAIL_ITEM_AKVAULT,
+            startDestination = NavDestination.SPLASH,
             modifier = Modifier.padding(innerPadding)
         ) {
             // SPLASH & ONBOARDING
@@ -158,13 +158,13 @@ fun AppNavHost(
             // HOME, REPORT, PROFILE
             composable(NavDestination.HOME) {
                 HomeScreen(
-                    onBackClick = {  }
+                    onBackClick = { navController.popBackStack() }
                 )
             }
 
             composable(NavDestination.REPORT) {
                 ReportScreen(
-                    onBackClick = { navController.navigate(NavDestination.HOME) }
+                    onBackClick = { navController.popBackStack() }
                 )
             }
 
@@ -181,11 +181,24 @@ fun AppNavHost(
 
             // AKVAULT
             composable (NavDestination.AKVAULT ) {
-                AkVaultScreen()
+                AkVaultScreen(
+                    onBackClick = { navController.popBackStack() },
+                    onMuseumClick = { navController.navigate(NavDestination.DETAIL_MUSEUM_AKVAULT) },
+                    onArtifactClick = { navController.navigate(NavDestination.DETAIL_ITEM_AKVAULT) }
+                )
             }
 
             composable(NavDestination.DETAIL_ITEM_AKVAULT) {
-                DetailItemAkVault()
+                DetailItemAkVault(
+                    onBackClick = { navController.popBackStack() }
+                )
+            }
+
+            composable(NavDestination.DETAIL_MUSEUM_AKVAULT) {
+                DetailMuseumAkVaultScreen(
+                    onBackClick = { navController.popBackStack() },
+                    onArtifactClick = { navController.navigate(NavDestination.DETAIL_ITEM_AKVAULT) }
+                )
             }
         }
     }

@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SegmentedButtonDefaults.borderStroke
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,15 +40,21 @@ import com.example.aksa.ui.theme.NonWhite
 @Composable
 fun ArtifactItemCard(
     artifact: ArtifactItem,
+    backgroundColor: Color,
+    borderColor: Color,
     onClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = NonWhite
+            containerColor = backgroundColor
+        ),
+        border = borderStroke(
+            width = 1.dp,
+            color = borderColor
         )
     ) {
         Row(
@@ -109,18 +116,4 @@ fun ArtifactItemCard(
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun sdf() {
-    ArtifactItemCard(
-        artifact = ArtifactItem(
-            name = "Arca Ganesha",
-            location = "Lihat detail alamatnya",
-            image = R.drawable.img_header_forgot_password,
-            museumCategory = "Museum Nasional"
-        ),
-        onClick = {}
-    )
 }

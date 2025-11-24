@@ -55,7 +55,9 @@ fun MuseumSection(
             items.forEachIndexed { index, artifact ->
                 ArtifactItemCard(
                     artifact = artifact,
-                    onClick = { onArtifactClick(artifact) }
+                    onClick = { onArtifactClick(artifact) },
+                    backgroundColor = NonWhite,
+                    borderColor = NonWhite
                 )
 
                 if (index != items.lastIndex)

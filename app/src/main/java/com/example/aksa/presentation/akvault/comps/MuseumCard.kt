@@ -107,15 +107,3 @@ fun MuseumCard(
         }
     }
 }
-
-@Preview
-@Composable
-private fun asdf() {
-    MuseumCard(
-        museum = Museum(
-            name = "Museum Nasional",
-            image = R.drawable.img_header_forgot_password
-        ),
-        onClick = {}
-    )
-}
